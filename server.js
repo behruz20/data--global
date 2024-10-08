@@ -15,6 +15,6 @@ ApiUrl.use(express.json());
 
 ApiUrl.use('/users', userRoutes);
 
-ApiUrl.listen(5000, () => {
+ApiUrl.listen(5001, () => {
     console.log('Your API is running on port 5001');
 });
