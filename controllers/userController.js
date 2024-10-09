@@ -1,14 +1,14 @@
 const User = require('../models/User');
 
 const createUser = async (req, res) => {
-    const { name, age, surname } = req.body;
+    const { name, surname, gmail } = req.body;
 
-    if (!name || !age || !surname) {
+    if (!name || !surname || !gmail) {
         return res.status(400).json({ message: 'Bad Request: Missing data' });
     }
 
     try {
-        const newUser = new User({ name, age, surname });
+        const newUser = new User({ name, surname, gmail });
         await newUser.save();
         res.json({ data: newUser });
     } catch (err) {
