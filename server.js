@@ -4,12 +4,14 @@ const connectDB = require('./config/database');
 
 const userRoutes = require('./routes/Users');
 
+
 const ApiUrl = express();
 
 connectDB();
 
 ApiUrl.use(cors());
 ApiUrl.use(express.json());
+
 
 ApiUrl.use('/users', userRoutes);
 
