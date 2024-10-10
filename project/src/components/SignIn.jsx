@@ -7,20 +7,20 @@ const SignIn = () => {
     surname: '',
     age: '',
   });
-  const [errorMessage, setErrorMessage] = useState(''); // Xato xabarini saqlash uchun holat
-  const navigate = useNavigate(); // navigate qilish uchun
+  const [errorMessage, setErrorMessage] = useState(''); // Error message state
+  const navigate = useNavigate(); // For navigation
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    setErrorMessage(''); // Input o'zgartirilganda xato xabarini tozalash
+    setErrorMessage(''); // Clear error message when input changes
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:5000/users');
+      const response = await fetch('http://localhost:5001/users');
       const result = await response.json();
       const users = result.data;
 
@@ -33,9 +33,10 @@ const SignIn = () => {
 
         if (userExists) {
           console.log('User signed in:', userExists);
-          navigate('/allpage'); // muvaffaqiyatli kirgandan keyin AllPage ga o'tish
+          localStorage.setItem('signedInUser', JSON.stringify(userExists)); // Save user to local storage
+          navigate('/allpage'); // Navigate to AllPage after successful sign in
         } else {
-          setErrorMessage('User topilmadi'); // Xato xabarini o'rnatish
+          setErrorMessage('User not found'); // Set error message if user not found
         }
       } else {
         console.error('Received data is not an array:', users);
@@ -48,17 +49,17 @@ const SignIn = () => {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md relative">
-        <h2 className="text-2xl font-semibold mb-6 text-center">Kirish</h2>
-        
+        <h2 className="text-2xl font-semibold mb-6 text-center">Sign In</h2>
+
         <div className="absolute top-4 right-4">
           <Link to="/signup" className="text-blue-500 hover:underline">
-            Ro'yxatdan o'tish
+            Sign Up
           </Link>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-gray-700">Ism</label>
+            <label className="block text-gray-700">First Name</label>
             <input
               type="text"
               name="name"
@@ -69,7 +70,7 @@ const SignIn = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Familiya</label>
+            <label className="block text-gray-700">Last Name</label>
             <input
               type="text"
               name="surname"
@@ -80,7 +81,7 @@ const SignIn = () => {
             />
           </div>
           <div className="mb-6">
-            <label className="block text-gray-700">Yosh</label>
+            <label className="block text-gray-700">Age</label>
             <input
               type="number"
               name="age"
@@ -94,11 +95,10 @@ const SignIn = () => {
             type="submit"
             className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
           >
-            Kirish
+            Sign In
           </button>
         </form>
 
-        {/* Xato xabarini ko'rsatish */}
         {errorMessage && (
           <div className="mt-4 text-red-500 text-center">
             {errorMessage}
